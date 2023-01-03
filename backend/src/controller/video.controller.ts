@@ -20,7 +20,6 @@ import {
   FilesInterceptor,
 } from '@nestjs/platform-express';
 import { response } from 'express';
-import { request } from 'http';
 
 @Controller('/api/v1/video')
 export class VideoController {
@@ -49,6 +48,26 @@ export class VideoController {
     const newVideo = await this.videoService.createVideo(requestBody);
     return response.status(HttpStatus.CREATED).json({
       newVideo,
+    });
+  }
+  @Get()
+  async read(@Query() id): Promise<object> {
+    return await this.videoService.readVideo(id);
+  }
+  @Get('/:id')
+  async stream(@Param('id') id, @Res() response, @Req() request) {
+    return this.videoService.streamVideo(id, response, request);
+  }
+  @Put('/:id')
+  async update(@Res() response, @Param('id') id, @Body() video: Video) {
+    const updatedVideo = await this.videoService.update(id, video);
+    return response.status(HttpStatus.OK).json(updatedVideo);
+  }
+  @Delete('/:id')
+  async delete(@Res() response, @Param('id') id) {
+    await this.videoService.delete(id);
+    return response.status(HttpStatus.OK).json({
+      user: null,
     });
   }
 }
