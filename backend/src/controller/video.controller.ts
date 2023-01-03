@@ -14,12 +14,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { Video } from '../model/video.schema';
-import { VideoService } from '../video.service';
+import { VideoService } from '../service/video.service';
 import {
   FileFieldsInterceptor,
   FilesInterceptor,
 } from '@nestjs/platform-express';
-import { response } from 'express';
 
 @Controller('/api/v1/video')
 export class VideoController {
